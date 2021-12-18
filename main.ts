@@ -1,50 +1,35 @@
-input.onPinPressed(TouchPin.P0, function () {
-    basic.showLeds(`
-        . . . . .
-        . . . . .
-        # # # # #
-        . . . . .
-        . . . . .
-        `)
-})
-input.onGesture(Gesture.TiltRight, function () {
-    if (mode == 1) {
-        serial.writeString("R")
-        basic.showArrow(ArrowNames.East)
+function menu () {
+    if (input.buttonIsPressed(Button.A)) {
+        mode = 1
+    } else if (input.buttonIsPressed(Button.B)) {
+        mode = 2
     }
-})
-input.onButtonPressed(Button.A, function () {
-    if (mode == 1) {
-        basic.showLeds(`
-            . . . . .
-            # # . . .
-            # # . . .
-            # # . . .
-            . . . . .
-            `)
-        serial.writeLine("A")
-    }
-})
-input.onGesture(Gesture.TiltLeft, function () {
-    if (mode == 1) {
-        serial.writeString("L")
+    basic.showIcon(IconNames.Happy)
+}
+function serial2 () {
+    if (input.isGesture(Gesture.TiltLeft)) {
+        serial.writeLine("L")
         basic.showArrow(ArrowNames.West)
-    }
-})
-input.onGesture(Gesture.LogoUp, function () {
-    if (mode == 1) {
-        serial.writeString("D")
+    } else if (input.isGesture(Gesture.TiltRight)) {
+        serial.writeLine("R")
+        basic.showArrow(ArrowNames.East)
+    } else if (input.isGesture(Gesture.LogoUp)) {
+        serial.writeLine("D")
         basic.showArrow(ArrowNames.South)
-    }
-})
-input.onGesture(Gesture.LogoDown, function () {
-    if (mode == 1) {
-        serial.writeString("U")
+    } else if (input.isGesture(Gesture.LogoDown)) {
+        serial.writeLine("U")
         basic.showArrow(ArrowNames.North)
-    }
-})
-input.onButtonPressed(Button.B, function () {
-    if (mode == 1) {
+    } else if (input.buttonIsPressed(Button.A)) {
+        serial.writeLine("A")
+        basic.showLeds(`
+            . . . . .
+            # # . . .
+            # # . . .
+            # # . . .
+            . . . . .
+            `)
+    } else if (input.buttonIsPressed(Button.B)) {
+        serial.writeLine("B")
         basic.showLeds(`
             . . . . .
             . . . # #
@@ -52,26 +37,34 @@ input.onButtonPressed(Button.B, function () {
             . . . # #
             . . . . .
             `)
-        serial.writeLine("B")
+    } else if (input.buttonIsPressed(Button.AB)) {
+        serial.writeLine("H")
+        basic.showLeds(`
+            . . . . .
+            # # . # #
+            # # . # #
+            # # . # #
+            . . . . .
+            `)
+    } else if (input.pinIsPressed(TouchPin.P2)) {
+        serial.writeLine("E")
+        mode = 0
+    } else {
+    	
     }
-})
-input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    basic.showLeds(`
-        . . # . .
-        . . # . .
-        . . # . .
-        . . # . .
-        . . # . .
-        `)
-})
+}
+function doSomething () {
+    mode = 0
+    basic.showIcon(IconNames.Sad)
+}
 let mode = 0
 mode = 0
 basic.forever(function () {
     if (mode == 0) {
-    	
-    } else if (false) {
-    	
+        menu()
+    } else if (mode == 1) {
+        serial2()
     } else {
-    	
+        doSomething()
     }
 })
