@@ -6,6 +6,8 @@ function menu () {
         basic.pause(1000)
     } else if (input.buttonIsPressed(Button.B)) {
         mode = 2
+        brightness = 255
+        beepNo = 0
         basic.clearScreen()
         basic.pause(1000)
     }
@@ -46,7 +48,17 @@ function beep () {
         brightness += 10
         music.stopAllSounds()
     } else if (brightness < input.lightLevel()) {
-        music.ringTone(262)
+        if (beepNo == 0) {
+            music.ringTone(554)
+        } else if (beepNo == 1) {
+            music.ringTone(466)
+        } else if (beepNo == 2) {
+            music.ringTone(370)
+        }
+        beepNo += 1
+        if (beepNo > 2) {
+            beepNo = 0
+        }
     } else {
         music.stopAllSounds()
     }
@@ -55,6 +67,7 @@ function beep () {
         music.stopAllSounds()
     }
 }
+let beepNo = 0
 let brightness = 0
 let mode = 0
 mode = 0
